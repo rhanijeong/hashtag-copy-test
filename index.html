@@ -1,0 +1,30 @@
+<button id="copyBtn">해시태그 복사하기</button>
+<div id="msg">✔ 복사되었습니다!</div>
+
+<script>
+  const hashtagsText = `
+#삼성전자 #이벤트 #예시해시태그
+#두줄로_쓰고싶으면_이렇게
+  `.trim();
+
+  const copyBtn = document.getElementById('copyBtn');
+  const msg = document.getElementById('msg');
+
+  copyBtn.addEventListener('click', async () => {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(hashtagsText);
+    } else {
+      const tempArea = document.createElement('textarea');
+      tempArea.value = hashtagsText;
+      document.body.appendChild(tempArea);
+      tempArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempArea);
+    }
+
+    msg.style.display = 'block';
+    setTimeout(() => {
+      msg.style.display = 'none';
+    }, 1500);
+  });
+</script>
