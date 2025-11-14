@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>해시태그 복사</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background-color: #f3f5f9; /* 연한 회색 배경 */
+      min-height: 100vh;
+
+      /* 화면 정중앙 정렬 */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .wrapper {
+      text-align: center;
+      padding: 40px 32px;
+    }
+
+    .title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1f2933; /* 진한 남색 계열 */
+      margin-bottom: 12px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #6b7280;
+      line-height: 1.5;
+      margin-bottom: 32px;
+    }
+
+    #copyBtn {
+      padding: 14px 40px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #ffffff;
+      background-color: #1f57ff;  /* 파란 버튼 */
+      border: none;
+      border-radius: 999px;       /* 완전한 pill 모양 */
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(0, 62, 255, 0.25);
+      transition: transform 0.1s ease, box-shadow 0.1s ease,
+        background-color 0.1s ease;
+    }
+
+    #copyBtn:hover {
+      background-color: #1844c7;
+      transform: translateY(-1px);
+      box-shadow: 0 12px 30px rgba(0, 62, 255, 0.3);
+    }
+
+    #copyBtn:active {
+      transform: translateY(1px);
+      box-shadow: 0 6px 15px rgba(0, 62, 255, 0.25);
+    }
+
+    #msg {
+      display: none;
+      margin-top: 14px;
+      font-size: 13px;
+      color: #0a9800;
+    }
+
+    /* 모바일에서 여백 조금 줄이기 */
+    @media (max-width: 480px) {
+      .wrapper {
+        padding: 32px 20px;
+      }
+      .title {
+        font-size: 20px;
+      }
+      #copyBtn {
+        width: 100%;
+        max-width: 260px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 실제 복사될 해시태그 (화면에는 안 보이게 숨김) -->
+  <div id="hashtags" style="position: absolute; left: -9999px;">
+    #삼성전자 #이벤트 #예시해시태그 #원하는대로_수정
+  </div>
+
+  <!-- 가운데 정렬된 내용 -->
+  <div class="wrapper">
+    <h1 class="title">해시태그 복사</h1>
+    <p class="subtitle">
+      버튼을 누르면 전체 해시태그가<br />
+      복사됩니다
+    </p>
+
+    <button id="copyBtn">해시태그 복사하기</button>
+    <div id="msg">✔ 복사되었습니다!</div>
+  </div>
+
+  <script>
+    const copyBtn = document.getElementById('copyBtn');
+    const hashtags = document.getElementById('hashtags');
+    const msg = document.getElementById('msg');
+
+    copyBtn.addEventListener('click', async () => {
+      const text = hashtags.textContent.trim();
+
+      if (navigator.clipboard && window.isSecureContext) {
+        try {
+          await navigator.clipboard.writeText(text);
+        } catch (e) {
+          console.error(e);
+        }
+      } else {
+        const tempArea = document.createElement('textarea');
+        tempArea.value = text;
+        document.body.appendChild(tempArea);
+        tempArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempArea);
+      }
+
+      msg.style.display = 'block';
+      setTimeout(() => {
+        msg.style.display = 'none';
+      }, 1500);
+    });
+  </script>
+</body>
+</html>
